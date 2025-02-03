@@ -9,16 +9,17 @@
         body {
             text-align: center;
             font-family: 'Poppins', sans-serif;
-            background: linear-gradient(45deg, #ff9a9e, #fad0c4);
+            background: linear-gradient(45deg, #ff758c, #ff7eb3);
             height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             margin: 0;
+            padding: 20px;
         }
         h1 {
-            font-size: 32px;
+            font-size: 28px;
             color: white;
             text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
         }
@@ -29,8 +30,8 @@
             margin-top: 20px;
         }
         .btn {
-            font-size: 18px;
-            padding: 15px 30px;
+            font-size: 20px;
+            padding: 15px 35px;
             border: none;
             border-radius: 30px;
             cursor: pointer;
@@ -63,6 +64,15 @@
             from { opacity: 0; }
             to { opacity: 1; }
         }
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 24px;
+            }
+            .btn {
+                font-size: 18px;
+                padding: 12px 30px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -81,17 +91,20 @@
         let buttons = document.getElementById("buttons");
         let moveAmount = 10;
         let yesSize = 18;
-        
-        noButton.addEventListener("mouseover", function() {
-            let x = (Math.random() * 200) - 100;
-            let y = (Math.random() * 200) - 100;
+
+        function moveNoButton() {
+            let x = (Math.random() * window.innerWidth / 2) - (window.innerWidth / 4);
+            let y = (Math.random() * window.innerHeight / 2) - (window.innerHeight / 4);
             noButton.style.transform = `translate(${x}px, ${y}px)`;
             moveAmount += 10;
             yesSize += 5;
             yesButton.style.fontSize = yesSize + "px";
             yesButton.style.padding = (yesSize / 2) + "px " + yesSize + "px";
-        });
-        
+        }
+
+        noButton.addEventListener("mouseover", moveNoButton);
+        noButton.addEventListener("touchstart", moveNoButton); // Funcționează pe telefoane
+
         yesButton.addEventListener("click", function() {
             title.style.display = "none";
             buttons.style.display = "none";
@@ -100,3 +113,4 @@
     </script>
 </body>
 </html>
+
