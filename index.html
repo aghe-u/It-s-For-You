@@ -3,13 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Will you be my Valentine?</title>
+    <title>Valentine's Treasure Hunt</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
     <style>
         body {
             text-align: center;
             font-family: 'Poppins', sans-serif;
-            background: linear-gradient(45deg, #ff758c, #ff7eb3);
             height: 100vh;
             display: flex;
             flex-direction: column;
@@ -17,18 +16,11 @@
             justify-content: center;
             margin: 0;
             padding: 20px;
+            overflow: hidden;
+            transition: background 1s ease-in-out;
+            background: #ff758c;
         }
-        h1 {
-            font-size: 28px;
-            color: white;
-            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
-        }
-        #buttons {
-            display: flex;
-            gap: 20px;
-            position: relative;
-            margin-top: 20px;
-        }
+        .hidden { display: none; }
         .btn {
             font-size: 20px;
             padding: 15px 35px;
@@ -39,78 +31,108 @@
             transition: all 0.3s ease-in-out;
             box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.2);
         }
-        #yes {
-            background-color: #4CAF50;
-            color: white;
-        }
-        #yes:hover {
-            background-color: #45a049;
-            transform: scale(1.1);
-        }
-        #no {
-            background-color: #ff4d4d;
-            color: white;
-            position: absolute;
-        }
-        #message {
-            margin-top: 20px;
-            font-size: 24px;
-            font-weight: bold;
-            color: white;
-            display: none;
-            animation: fadeIn 1s ease-in-out;
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-        @media (max-width: 600px) {
-            h1 {
-                font-size: 24px;
-            }
-            .btn {
-                font-size: 18px;
-                padding: 12px 30px;
-            }
-        }
+        #yes { background-color: #4CAF50; color: white; transition: transform 0.2s; }
+        #no { background-color: #ff4d4d; color: white; position: absolute; transition: transform 0.2s; }
+        .submit-btn { background-color: #007BFF; color: white; }
+        input { padding: 10px; font-size: 16px; margin-top: 10px; }
     </style>
 </head>
-<body>
-    <h1 id="title">Will you be my Valentine? 💖</h1>
-    <div id="buttons">
-        <button id="yes" class="btn">YES</button>
-        <button id="no" class="btn">NO</button>
+<body id="background">
+    <div id="firstStep">
+        <h1>Will you be my Valentine? 💖</h1>
+        <div>
+            <button id="yes" class="btn">YES</button>
+            <button id="no" class="btn">NO</button>
+        </div>
     </div>
-    <p id="message">You're the best! I love you! ❤️😍</p>
+
+    <div id="step2" class="hidden">
+        <h1>When was our first kiss? 💋</h1>
+        <input type="text" id="answer1" placeholder="Enter the date">
+        <button id="submitAnswer1" class="btn submit-btn">Submit</button>
+    </div>
+
+    <div id="step3" class="hidden">
+        <h1>What is my favorite color? 🎨</h1>
+        <input type="text" id="answer2" placeholder="Your answer">
+        <button id="submitAnswer2" class="btn submit-btn">Submit</button>
+    </div>
+
+    <div id="finalStep" class="hidden">
+        <h1>See you soon! ❤️</h1>
+    </div>
 
     <script>
         let noButton = document.getElementById("no");
         let yesButton = document.getElementById("yes");
-        let message = document.getElementById("message");
-        let title = document.getElementById("title");
-        let buttons = document.getElementById("buttons");
-        let moveAmount = 10;
-        let yesSize = 18;
+        let answer1 = document.getElementById("answer1");
+        let submitAnswer1 = document.getElementById("submitAnswer1");
+        let answer2 = document.getElementById("answer2");
+        let submitAnswer2 = document.getElementById("submitAnswer2");
+        let firstStep = document.getElementById("firstStep");
+        let step2 = document.getElementById("step2");
+        let step3 = document.getElementById("step3");
+        let finalStep = document.getElementById("finalStep");
+        let background = document.getElementById("background");
+
+        let colors = ['#ff758c', '#ff7eb3', '#ffcc5c', '#ff6b6b'];
+        let currentStep = 0;
+        let yesSize = 20;
+
+        function changeBackground() {
+            background.style.background = colors[currentStep];
+        }
 
         function moveNoButton() {
             let x = (Math.random() * window.innerWidth / 2) - (window.innerWidth / 4);
             let y = (Math.random() * window.innerHeight / 2) - (window.innerHeight / 4);
             noButton.style.transform = `translate(${x}px, ${y}px)`;
-            moveAmount += 10;
             yesSize += 5;
             yesButton.style.fontSize = yesSize + "px";
-            yesButton.style.padding = (yesSize / 2) + "px " + yesSize + "px";
         }
 
         noButton.addEventListener("mouseover", moveNoButton);
-        noButton.addEventListener("touchstart", moveNoButton); // Funcționează pe telefoane
+        noButton.addEventListener("touchstart", moveNoButton);
 
         yesButton.addEventListener("click", function() {
-            title.style.display = "none";
-            buttons.style.display = "none";
-            message.style.display = "block";
+            firstStep.classList.add("hidden");
+            step2.classList.remove("hidden");
+            currentStep = 1;
+            changeBackground();
+            yesSize += 10;
+            yesButton.style.fontSize = yesSize + "px";
+        });
+
+        function checkAnswer(input, correctAnswer, nextStep) {
+            if (input.value.trim().toLowerCase() === correctAnswer) {
+                nextStep.classList.remove("hidden");
+                input.parentElement.classList.add("hidden");
+                currentStep++;
+                changeBackground();
+            } else {
+                alert("Try again!");
+            }
+        }
+
+        submitAnswer1.addEventListener("click", function() {
+            checkAnswer(answer1, "26 octombrie", step3);
+        });
+
+        submitAnswer2.addEventListener("click", function() {
+            checkAnswer(answer2, "rosu", finalStep);
+        });
+
+        answer1.addEventListener("keypress", function(event) {
+            if (event.key === "Enter") {
+                submitAnswer1.click();
+            }
+        });
+
+        answer2.addEventListener("keypress", function(event) {
+            if (event.key === "Enter") {
+                submitAnswer2.click();
+            }
         });
     </script>
 </body>
 </html>
-
