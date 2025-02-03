@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Will you be my Valentine?</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            text-align: center;
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(45deg, #ff9a9e, #fad0c4);
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin: 0;
+        }
+        h1 {
+            font-size: 32px;
+            color: white;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+        }
+        #buttons {
+            display: flex;
+            gap: 20px;
+            position: relative;
+            margin-top: 20px;
+        }
+        .btn {
+            font-size: 18px;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease-in-out;
+            box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.2);
+        }
+        #yes {
+            background-color: #4CAF50;
+            color: white;
+        }
+        #yes:hover {
+            background-color: #45a049;
+            transform: scale(1.1);
+        }
+        #no {
+            background-color: #ff4d4d;
+            color: white;
+            position: absolute;
+        }
+        #message {
+            margin-top: 20px;
+            font-size: 24px;
+            font-weight: bold;
+            color: white;
+            display: none;
+            animation: fadeIn 1s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <h1 id="title">Will you be my Valentine? 💖</h1>
+    <div id="buttons">
+        <button id="yes" class="btn">YES</button>
+        <button id="no" class="btn">NO</button>
+    </div>
+    <p id="message">You're the best! I love you! ❤️😍</p>
+
+    <script>
+        let noButton = document.getElementById("no");
+        let yesButton = document.getElementById("yes");
+        let message = document.getElementById("message");
+        let title = document.getElementById("title");
+        let buttons = document.getElementById("buttons");
+        let moveAmount = 10;
+        let yesSize = 18;
+        
+        noButton.addEventListener("mouseover", function() {
+            let x = (Math.random() * 200) - 100;
+            let y = (Math.random() * 200) - 100;
+            noButton.style.transform = `translate(${x}px, ${y}px)`;
+            moveAmount += 10;
+            yesSize += 5;
+            yesButton.style.fontSize = yesSize + "px";
+            yesButton.style.padding = (yesSize / 2) + "px " + yesSize + "px";
+        });
+        
+        yesButton.addEventListener("click", function() {
+            title.style.display = "none";
+            buttons.style.display = "none";
+            message.style.display = "block";
+        });
+    </script>
+</body>
+</html>
